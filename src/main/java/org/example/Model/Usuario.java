@@ -1,17 +1,18 @@
 package org.example.Model;
-import oracle.sql.DATE;
-import oracle.sql.NUMBER;
 
-import java.sql.Connection;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import java.sql.Date;
 
-
-public class Usuario{
-    private String id_Usuario;
-    private String Nombre_Usuario;
-    private String Apellido_Usuario;
-    private String Correo_Electronico;
-    private String Contrasena;
-    private NUMBER Altura;
-    private NUMBER Peso;
-    private DATE FECHA;
+@Data
+@AllArgsConstructor
+public class Usuario {
+    private String idUsuario;
+    private String nombreUsuario;
+    private String apellidoUsuario;
+    private String email;
+    private String contrasena;
+    private float altura;
+    private float peso;
+    private Date fechaNacimiento;
 }
