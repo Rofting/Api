@@ -1,20 +1,24 @@
 package org.example.Main;
+import org.example.Repository.*;
+import org.jdbi.v3.core.Jdbi;
+import org.example.Main.DatabaseConnector;
 
-import java.sql.Connection; // Importar la clase Connection
-
-import java.sql.SQLException;
+import javax.sql.DataSource;
 
 public class Main {
     public static void main(String[] args) {
         try {
             DatabaseConnector connector = new DatabaseConnector();
-            Connection connection = connector.getConnection();
-            Menu menu = new Menu(connection);
-            menu.showMenu();
-            menu.closeScanner();
-            connector.closeConnection();
-        } catch (SQLException e) {
-            System.out.println("Connection failed. Error: " + e.getMessage());
+            DataSource dataSource = connector.getDataSource();
+
+            Jdbi jdbi = Jdbi.create(dataSource);
+            jdbi.registerRowMapper(new usuarioMapper());
+            jdbi.registerRowMapper(new categoriaMapper());
+            jdbi.registerRowMapper(new registroAlimentoMapper());
+            jdbi.registerRowMapper(new contenidoNutricionalMapper());
+            jdbi.registerRowMapper(new alimentoMapper());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

@@ -2,12 +2,14 @@ package org.example.Model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import java.sql.Date;
+import lombok.NoArgsConstructor;
 
+import java.sql.Date;
+@NoArgsConstructor
 @Data
 @AllArgsConstructor
 public class Usuario {
-    private String idUsuario;
+    private int idUsuario;
     private String nombreUsuario;
     private String apellidoUsuario;
     private String email;

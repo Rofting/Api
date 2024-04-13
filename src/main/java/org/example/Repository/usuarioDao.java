@@ -1,42 +1,66 @@
 package org.example.Repository;
+
+import lombok.AllArgsConstructor;
 import org.example.Model.Usuario;
+import org.jdbi.v3.core.Jdbi;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.util.List;
 
+@AllArgsConstructor
 public class usuarioDao {
-    private Connection connection;
+    private Jdbi jdbi;
 
-    public usuarioDao(Connection connection) {
-        this.connection = connection;
+    public void createUser(Usuario usuario) {
+        jdbi.useHandle(handle ->
+                handle.createUpdate("INSERT INTO USUARIO (NOMBRE_USUARIO, APELLIDO_USUARIO, EMAIL, CONTRASENA, ALTURA, PESO, FECHA_NACIMIENTO) VALUES (?, ?, ?, ?, ?, ?, ?)")
+                        .bind(0, usuario.getNombreUsuario())
+                        .bind(1, usuario.getApellidoUsuario())
+                        .bind(2, usuario.getEmail())
+                        .bind(3, usuario.getContrasena())
+                        .bind(4, usuario.getAltura())
+                        .bind(5, usuario.getPeso())
+                        .bind(6, usuario.getFechaNacimiento())
+                        .execute()
+        );
     }
 
-    public void createUser(Usuario usuario) throws SQLException {
-        String sql = "INSERT INTO USUARIO (NOMBRE_USUARIO,APELLIDO_USUARIO,CONTRASENA,EMAIL,ALTURA,PESO,FECHA_NACIMIENTO) VALUES (?,?,?,?,?,?,?)";
-        try (PreparedStatement statement = connection.prepareStatement(sql)){
-            statement.setString(1, usuario.getNOMBRE_USUARIO());
-            statement.setString(2, usuario.getAPELLIDO_USUARIO());
-            statement.setString(3, usuario.getCONTRASENA());
-            statement.setString(4, usuario.getEMAIL());
-            statement.setFloat(5, usuario.getAltura());
-            statement.setFloat(6, usuario.getPeso());
-            statement.setDate(7, new java.sql.Date(usuario.getFECHA_NACIMIENTO().getTime()));
-            statement.executeUpdate();
-        }
+    public void deleteUser(Usuario usuario) {
+        jdbi.useHandle(handle ->
+                handle.createUpdate("DELETE FROM USUARIO WHERE nombreUsuario = ?")
+                        .bind(0, usuario.getNombreUsuario())
+                        .execute()
+        );
     }
 
-    public void deleteUser(Usuario usuario) throws SQLException {
-        String sql = "DELETE FROM USUARIO WHERE NOMBRE_USUARIO = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)){
-            statement.setString(1, usuario.getNOMBRE_USUARIO());
-            statement.executeUpdate();
-        }
+    public void updateUser(Usuario usuario) {
+        jdbi.useHandle(handle ->
+                handle.createUpdate("UPDATE USUARIO SET nombreUsuario = ?, apellidoUsuario = ?, email = ?, contrasena = ?, altura = ?, peso = ?, fechaNacimiento = ? WHERE nombreUsuario = ?")
+                        .bind(0, usuario.getNombreUsuario())
+                        .bind(1, usuario.getApellidoUsuario())
+                        .bind(2, usuario.getEmail())
+                        .bind(3, usuario.getContrasena())
+                        .bind(4, usuario.getAltura())
+                        .bind(5, usuario.getPeso())
+                        .bind(6, usuario.getFechaNacimiento())
+                        .bind(7, usuario.getNombreUsuario()) // Para el WHERE
+                        .execute()
+        );
     }
-}
-public void updateUser(Usuario usuario) throws SQLException{
-    String sql = "UPDATE usuario SET nombre_usuario = ?, apellido_usuario = ?, correo_electronico = ?, contrasena = ?, altura = ?, peso = ?, fecha = ? WHERE id_usuario = ?";
-    try (PreparedStatement statement = connection.prepareStatement(sql)){
-        statement.setString(1, usuario.getNOMBRE_USUARIO());
+
+    public Usuario readUser(int idUsuario) {
+        return jdbi.withHandle(handle ->
+                handle.createQuery("SELECT * FROM USUARIO WHERE idUsuario = ?")
+                        .bind(0, idUsuario)
+                        .mapToBean(Usuario.class)
+                        .findOnly()
+        );
+    }
+
+    public List<Usuario> readAllUsers() {
+        return jdbi.withHandle(handle ->
+                handle.createQuery("SELECT * FROM USUARIO")
+                        .mapToBean(Usuario.class)
+                        .list()
+        );
     }
 }

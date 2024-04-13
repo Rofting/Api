@@ -1,26 +1,24 @@
 package org.example.Main;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import javax.sql.DataSource;
+
+import lombok.Getter;
+import org.apache.commons.dbcp2.BasicDataSource;
+
 
 public class DatabaseConnector {
     private final String DB_URL = "jdbc:oracle:thin:@//localhost:1521/XE";
     private final String DB_USER = "JRODRIGUEZ";
     private final String DB_PASSWORD = "12231223";
-    private Connection connection;
+    @Getter
+    private final DataSource dataSource;
 
-    public DatabaseConnector() throws SQLException {
-        this.connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+    public DatabaseConnector() {
+        BasicDataSource ds = new BasicDataSource();
+        ds.setUrl(DB_URL);
+        ds.setUsername(DB_USER);
+        ds.setPassword(DB_PASSWORD);
+        this.dataSource = ds;
     }
 
-    public Connection getConnection() {
-        return this.connection;
-    }
-
-    public void closeConnection() throws SQLException {
-        if (this.connection != null) {
-            this.connection.close();
-        }
-    }
 }

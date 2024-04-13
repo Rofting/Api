@@ -1,15 +1,20 @@
 package org.example.Main;
+import org.example.Repository.usuarioDao;
 
 import java.util.Scanner;
 import java.sql.Connection;
 import java.sql.SQLException;
+import org.example.Model.Usuario;
+import oracle.sql.DATE;
+import org.jdbi.v3.core.Jdbi;
 
 public class Menu {
     private Scanner scanner;
     private Connection connection;
+    private usuarioDao usuarioDao;
 
-    public Menu(Connection connection) {
-        this.connection = connection;
+    public Menu(Jdbi jdbi) {
+        this.usuarioDao = new usuarioDao(jdbi);
         this.scanner = new Scanner(System.in);
     }
 
@@ -27,7 +32,7 @@ public class Menu {
 
             switch (option) {
                 case 1:
-                    createRecord();
+                    createUser();
                     break;
                 case 2:
                     readRecords();
@@ -47,17 +52,49 @@ public class Menu {
         } while (option != 0);
     }
 
-    private void createRecord() {
+    private void createUser() {
+        try {
+            // Datos del nuevo usuario
+            String nombreUsuario = "ejemplo";
+            String apellidoUsuario = "ejemplo";
+            String email = "ejemplo@example.com";
+            String contrasena = "123456";
+            float altura = 175.5F;
+            float peso = 70.0F;
 
+            // Crear una instancia de java.sql.Date a partir de una fecha en formato String
+            java.sql.Date fechaNacimiento = java.sql.Date.valueOf("1990-01-01");
+
+            // Crear una instancia de Usuario con los datos proporcionados
+            Usuario usuario = new Usuario(null, nombreUsuario, apellidoUsuario, email, contrasena, altura, peso, fechaNacimiento);
+
+            // Llamar al método createUser del usuarioDao para insertar el nuevo usuario en la base de datos
+            usuarioDao.createUser(usuario);
+
+            System.out.println("Usuario creado con éxito.");
+        } catch (Exception e) {
+            System.out.println("Error al crear el usuario: " + e.getMessage());
+        }
     }
+
+
 
     private void readRecords() {
         // Lógica para leer registros
     }
 
-    private void updateRecord() {
-        // Lógica para actualizar un registro
-    }
+
+        private void updateRecord()  {}   /*{
+        try {
+          Usuario usuario = new Usuario(/*Proporciona los datos del usuario a actualizar aquí* /);
+        userDao.updateUser(usuario);
+        System.out.println("Usuario actualizado con éxito.");
+        } catch (SQLException e) {
+          System.out.println("Error al actualizar el usuario: " + e.getMessage());
+        }
+        }
+        */
+
 
     private void deleteRecord() {
         // Lógica para eliminar un registro

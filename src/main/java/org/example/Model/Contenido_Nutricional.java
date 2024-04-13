@@ -1,13 +1,15 @@
 package org.example.Model;
 import lombok.Data;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import oracle.sql.NUMBER;
 
 @Data
 @AllArgsConstructor
-public class ContenidoNutricional {
-    private int idContenido; // Cambiado a camelCase
-    private int idAlimento; // Cambiado a camelCase
+@NoArgsConstructor
+public class Contenido_Nutricional {
+    private int idContenido;
+    private int idAlimento;
     private int calorias;
     private int proteinas;
     private int carbohidratos;
