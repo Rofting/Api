@@ -1,4 +1,4 @@
-package org.example.Model;
+package org.example.domain;
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -7,11 +7,11 @@ import java.sql.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Registro_Alimento {
-    private int idRegistro;
-    private int idUsuario;
-    private int idAlimento;
-    private int cantidadConsumida;
+public class RegistrosConsumoAlimentos {
+    private int id;
+    private int UsuarioId;
+    private int AlimentoId;
+    private double cantidadConsumida;
     private Date fechaConsumo;
 
 }
