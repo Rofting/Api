@@ -3,18 +3,18 @@ package org.example.dao;
 import org.example.domain.Vitaminas;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
-
-import java.util.List;
-
 import org.jdbi.v3.sqlobject.statement.UseRowMapper;
 
+import java.util.List;
 
 public interface VitaminaDao {
 
     @SqlQuery("SELECT * FROM Vitaminas")
+    @UseRowMapper(VitaminasMapper.class)
     List<Vitaminas> getAllVitaminas();
 
     @SqlQuery("SELECT * FROM Vitaminas WHERE id = :id")
+    @UseRowMapper(VitaminasMapper.class)
     Vitaminas getVitaminaById(long id);
 
     @SqlUpdate("INSERT INTO Vitaminas (nombre, cantidad) VALUES (:nombre, :cantidad)")
